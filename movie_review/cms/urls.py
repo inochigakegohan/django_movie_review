@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from cms import views
 
+app_name = 'cms'
 urlpatterns = [
     # 映画
     path('movie/', views.movie_list, name='movie_list'),  # 一覧
