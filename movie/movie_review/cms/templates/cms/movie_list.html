@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "cms/base.html" %}
 
-</body>
-</html>
+{% block title %}映画の一覧{% endblock title %}
+
+{% block content %}
+    <h4 class="mt-4 border-bottom">映画の一覧</h4>
+    <a href="{% url 'cms:movie_add' %}" class="btn btn-primary btn-sm my-3">追加</a>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">作品名</th>
+          <th scope="col">配給会社</th>
+          <th scope="col">時間</th>
+          <th scope="col">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for movie in movies %}
+        <tr>
+          <th scope="row">{{ movie.id }}</th>
+          <td>{{ movie.name }}</td>
+          <td>{{ movie.publisher }}</td>
+          <td>{{ movie.page }}</td>
+          <td>
+            <a href="{% url 'cms:movie_mod' movie_id=movie.id %}" class="btn btn-outline-primary btn-sm">修正</a>
+            <a href="{% url 'cms:movie_del' movie_id=movie.id %}" class="btn btn-outline-danger btn-sm">削除</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}
