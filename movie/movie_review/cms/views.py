@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
-from cms.models import Movie
-from cms.forms import MovieForm
+from cms.models import Movie, Impression
+from cms.forms import MovieForm, ImpressionForm
 from django.views.generic.list import ListView
 
 
@@ -56,3 +56,26 @@ class ImpressionList(ListView):
 
         context = self.get_context_data(object_list=self.object_list, movie=movie)
         return self.render_to_response(context)
+
+
+def impression_edit(request, movie_id, impression_id=None):
+    """感想の編集"""
+    movie = get_object_or_404(Movie, pk=movie_id)  # 親の映画を読む
+    if impression_id:  # impression_id が指定されている (修正時)
+        impression = get_object_or_404(Impression, pk=impression_id)
+    else:  # impression_id が指定されていない (追加時)
+        impression = Impression()
+
+    if request.method == 'POST':
+        form = ImpressionForm(request.POST, instance=impression)  # POST された request データからフォームを作成
+        if form.is_valid():  # フォームのバリデーション
+            impression = form.save(commit=False)
+            impression.movie = movie  # この感想の、親の映画をセット
+            impression.save()
+            return redirect('cms:impression_list', movie_id=movie_id)
+    else:  # GET の時
+        form = ImpressionForm(instance=impression)  # impression インスタンスからフォームを作成
+
+    return render(request,
+                  'cms/impression_edit.html',
+                  dict(form=form, movie_id=movie_id, impression_id=impression_id))
