@@ -36,4 +36,7 @@ def movie_edit(request, movie_id=None):
 
 def movie_del(request, movie_id):
     """映画の削除"""
-    return HttpResponse('映画の削除')
+    # return HttpResponse('映画の削除')
+    movie = get_object_or_404(Movie, pk=movie_id)
+    movie.delete()
+    return redirect('cms:movie_list')
