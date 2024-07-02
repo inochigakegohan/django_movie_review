@@ -79,3 +79,10 @@ def impression_edit(request, movie_id, impression_id=None):
     return render(request,
                   'cms/impression_edit.html',
                   dict(form=form, movie_id=movie_id, impression_id=impression_id))
+
+
+def impression_del(request, movie_id, impression_id):
+    """感想の削除"""
+    impression = get_object_or_404(Impression, pk=impression_id)
+    impression.delete()
+    return redirect('cms:impression_list', movie_id=movie_id)
