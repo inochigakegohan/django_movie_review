@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 from cms.models import Movie
 from cms.forms import MovieForm
+from django.views.generic.list import ListView
 
 
 def movie_list(request):
@@ -40,3 +41,18 @@ def movie_del(request, movie_id):
     movie = get_object_or_404(Movie, pk=movie_id)
     movie.delete()
     return redirect('cms:movie_list')
+
+
+class ImpressionList(ListView):
+    """感想の一覧"""
+    context_object_name = 'impressions'
+    template_name = 'cms/impression_list.html'
+    paginate_by = 2  # １ページは最大2件ずつでページングする
+
+    def get(self, request, *args, **kwargs):
+        movie = get_object_or_404(Movie, pk=kwargs['movie_id'])  # 親の映画を読む
+        impressions = movie.impressions.all().order_by('id')  # 映画の子供の、感想を読む
+        self.object_list = impressions
+
+        context = self.get_context_data(object_list=self.object_list, movie=movie)
+        return self.render_to_response(context)
