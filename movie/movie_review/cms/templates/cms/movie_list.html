@@ -31,3 +31,8 @@
       </tbody>
     </table>
 {% endblock content %}
+<td>
+    <a href="{% url 'cms:movie_mod' movie_id=movie.id %}" class="btn btn-outline-primary btn-sm">修正</a>
+    <a href="{% url 'cms:movie_del' movie_id=movie.id %}" class="btn btn-outline-danger btn-sm">削除</a>
+    <a href="{% url 'cms:impression_list' movie_id=movie.id %}" class="btn btn-outline-info btn-sm">感想の一覧</a>
+</td>
