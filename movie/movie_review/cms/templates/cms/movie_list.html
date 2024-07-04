@@ -20,8 +20,8 @@
             <tr>
                 <th scope="row">{{ movie.id }}</th>
                 <td>{{ movie.name }}</td>
-                <td>{{ movie.publisher }}</td>
-                <td>{{ movie.page }}</td>
+                <td>{{ movie.company }}</td>
+                <td>{{ movie.time }}</td>
                 <td>
                     <a href="{% url 'cms:movie_mod' movie_id=movie.id %}"
                        class="btn btn-outline-primary btn-sm">修正</a>
