@@ -21,10 +21,8 @@
                 <td>
                     <a href="{% url 'cms:impression_mod' movie_id=movie.id impression_id=impression.id %}"
                        class="btn btn-outline-primary btn-sm">修正</a>
-                    <button class="btn btn-outline-danger btn-sm del_confirm" data-toggle="modal"
-                            data-target="#deleteModal" data-pk="{{ impression.id }}"
-                            data-url="{% url 'cms:impression_del' movie_id=movie.id impression_id=impression.id %}">削除
-                    </button>
+                    <a href="{% url 'cms:impression_del' movie_id=movie.id impression_id=impression.id %}"
+                       class="btn btn-outline-primary btn-sm">削除</a>
                 </td>
             </tr>
         {% endfor %}
