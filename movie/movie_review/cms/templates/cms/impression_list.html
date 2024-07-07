@@ -21,8 +21,9 @@
                 <td>
                     <a href="{% url 'cms:impression_mod' movie_id=movie.id impression_id=impression.id %}"
                        class="btn btn-outline-primary btn-sm">修正</a>
-                    <a href="{% url 'cms:impression_del' movie_id=movie.id impression_id=impression.id %}"
-                       class="btn btn-outline-primary btn-sm">削除</a>
+                    <a href="#" class="btn btn-outline-danger btn-sm del_confirm"
+                       data-pk="{{ impression.id }}"
+                       data-url="{% url 'cms:impression_del' movie_id=movie.id impression_id=impression.id %}">削除</a>
                 </td>
             </tr>
         {% endfor %}
@@ -60,33 +61,41 @@
     {% endif %}
 
     <a href="{% url 'cms:movie_list' %}" class="btn btn-secondary btn-sm">戻る</a>
-
 {# 削除確認モーダルダイアログ #}
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteModalLabel">確認</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <p>ID: <span id="del_pk"></span> を削除しますか？</p>
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-primary" id="del_url">OK</a>
+                <form method="POST" id="delete-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">OK</button>
+                </form>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock content %}
 
 {% block extra_js %}
     <script>
         $(function () {
             $('.del_confirm').on('click', function () {
-                $("#del_pk").text($(this).data("pk"));
-                $('#del_url').attr('href', $(this).data("url"));
+                var pk = $(this).data("pk");
+                var url = $(this).data("url");
+                $("#del_pk").text(pk);
+                $('#delete-form').attr('action', url);
+                $('#deleteModal').modal('show');
             });
         });
     </script>
